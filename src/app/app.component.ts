@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DataProviderService } from './services/data-provider.service';
 import { BehaviorSubject, Observable, forkJoin, map, of } from 'rxjs';
@@ -16,6 +16,14 @@ export class AppComponent implements OnInit {
   title = "";
   headerText: string | undefined;
   loaderText: string | undefined;
+  @ViewChild("srAnnouncement", {static: false})
+  set watch(el: ElementRef) {
+    if (el) {
+      setTimeout(() => {
+        (el.nativeElement as HTMLElement).setAttribute("aria-hidden", "true");
+      }, 500);
+    }
+  }
   constructor(private dataService: DataProviderService) {}
   ngOnInit(): void {
     this.dataService.getHeading().subscribe((val) => {
@@ -26,5 +34,5 @@ export class AppComponent implements OnInit {
       this.loaderText = val ?? "page has been loaded";
     });
   }
-  
+
 }
