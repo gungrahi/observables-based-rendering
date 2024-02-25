@@ -1,9 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DataProviderService } from './services/data-provider.service';
-import { BehaviorSubject, Observable, forkJoin, map, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +19,7 @@ export class AppComponent implements OnInit {
     if (el) {
       setTimeout(() => {
         (el.nativeElement as HTMLElement).setAttribute("aria-hidden", "true");
-      }, 500);
+      }, 0);
     }
   }
   constructor(private dataService: DataProviderService) {}
