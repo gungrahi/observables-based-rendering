@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DataProviderService } from './services/data-provider.service';
 import { CommonModule } from '@angular/common';
+import { combineLatest, take } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -14,23 +15,30 @@ export class AppComponent implements OnInit {
   title = "";
   headerText: string | undefined;
   loaderText: string | undefined;
-  @ViewChild("srAnnouncement", {static: false})
-  set watch(el: ElementRef) {
-    if (el) {
-      setTimeout(() => {
-        (el.nativeElement as HTMLElement).setAttribute("aria-hidden", "true");
-      }, 0);
-    }
-  }
+  @ViewChild("srAnnouncement") el!: ElementRef;
+
   constructor(private dataService: DataProviderService) {}
   ngOnInit(): void {
-    this.dataService.getHeading().subscribe((val) => {
-      this.headerText = val ?? "";
+    const ob1$ = this.dataService.getHeading();
+    const ob2$ = this.dataService.getA11yText();
+    ob1$.subscribe((val) => {
+      // this.headerText = val ?? "";
       this.title = val;
     });
-    this.dataService.getA11yText().subscribe((val) => {
-      this.loaderText = val ?? "page has been loaded";
+    ob2$.subscribe((val) => {
+      // this.loaderText = val ?? "page has been loaded";
     });
+    combineLatest({
+      a: ob1$,
+      b: ob2$
+    }).pipe(take(1))
+      .subscribe(res => {
+        this.headerText = res.a ?? "";
+        this.loaderText = res.b ?? "page has been loaded";
+        setTimeout(() => {
+          (this.el.nativeElement as HTMLElement).setAttribute("aria-hidden", "true");
+        }, 10);
+      });
   }
 
 }
