@@ -1,9 +1,7 @@
 <main class="main">
   <div class="content">
+    <div #srLiveRegionContainer role="status" class="sr-only"></div>
     <h1>Hello, {{ title }}</h1>
-    <div role="status">
-      <span #srAnnouncement class="sr-only" *ngIf="headerText && loaderText" [innerHTML]="headerText + ' ' + loaderText"></span>
-    </div>
   </div>
 </main>
 
