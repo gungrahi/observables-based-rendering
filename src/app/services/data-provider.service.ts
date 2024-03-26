@@ -12,7 +12,13 @@ export class DataProviderService {
     return timer(1000).pipe(map((_) => "observables-based-rendering"));
   }
 
-  getA11yText(): Observable<string> {
-    return timer(2000).pipe(map((_) => "page has been loaded"));
+  getA11yText(): Observable<any> {
+    return timer(2000).pipe(map((_) => [
+      {
+        "text": {
+          "A11Y_PAGE_LOADED": "page has been loaded"
+        }
+      }
+    ]));
   }
 }
